@@ -35,7 +35,7 @@ jobs:
         with:
           java-version: 8
       - name: Build with Maven
-        run: mvn -B test --file simple-beans/pom.xml
+        run: mvn -B test --file pom.xml
       - uses: ashley-taylor/junit-report-annotations-action@master
         with:
           access-token: ${{ secrets.GITHUB_TOKEN }}
