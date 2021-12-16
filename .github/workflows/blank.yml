@@ -40,8 +40,3 @@ jobs:
         with:
           access-token: ${{ secrets.GITHUB_TOKEN }}
         if: always()
-      - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v2
-        if: always()
-        with:
-          report_paths: '**/target/surefire-reports/TEST-*.xml'
