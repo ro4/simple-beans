@@ -36,10 +36,6 @@ jobs:
           java-version: 8
       - name: Build with Maven
         run: mvn -B test --file pom.xml
-      - uses: ashley-taylor/junit-report-annotations-action@master
-        with:
-          access-token: ${{ secrets.GITHUB_TOKEN }}
-        if: always()
       - name: Test Report
         uses: dorny/test-reporter@v1
         if: success() || failure()    # run this step even if previous step failed
