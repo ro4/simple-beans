@@ -35,7 +35,6 @@ public class FirstBenchmark {
     }
 
     public static void main(String[] args) throws RunnerException {
-        System.out.println("hello");
         Options options = new OptionsBuilder()
                 .include(FirstBenchmark.class.getSimpleName())
 //                .output("target/jmh.log")
