@@ -4,10 +4,6 @@ import me.ro4.beans.beanexample.SimpleBean;
 import me.ro4.beans.impl.SimpleBeanDefinition;
 import me.ro4.beans.impl.SimpleBeanFactory;
 import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.RunnerException;
-import org.openjdk.jmh.runner.options.Options;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 import java.util.concurrent.TimeUnit;
 
