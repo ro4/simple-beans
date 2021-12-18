@@ -28,6 +28,10 @@ public class BeanFactoryBenchmark {
             BeanDefinition beanDefinition = new SimpleBeanDefinition();
             beanDefinition.setClassName(SimpleBean.class.getName());
             beanFactory.registerBeanDefinition("sb", beanDefinition);
+            BeanDefinition prototypeBD = new SimpleBeanDefinition();
+            prototypeBD.setScope(BeanDefinition.ScopeEnum.PROTOTYPE);
+            prototypeBD.setClassName(SimpleBean.class.getName());
+            beanFactory.registerBeanDefinition("prototype", prototypeBD);
         }
     }
 
@@ -39,5 +43,10 @@ public class BeanFactoryBenchmark {
     @Benchmark
     public Object getBeanByNameAndType(PrototypeCreationState state) {
         return state.beanFactory.getBean("sb", SimpleBean.class);
+    }
+
+    @Benchmark
+    public Object getBeanByNameScopePrototype(PrototypeCreationState state) {
+        return state.beanFactory.getBean("prototype");
     }
 }

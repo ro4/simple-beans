@@ -22,8 +22,8 @@ public class SimpleBeanFactory implements BeanFactory {
 
     private final InstantiationStrategy instantiationStrategy;
 
-    private final Set<String> currentInCreation =
-            Collections.newSetFromMap(new ConcurrentHashMap<>(16));
+    private final ThreadLocal<Set<String>> currentInCreation = ThreadLocal.withInitial(HashSet::new);
+//            Collections.newSetFromMap(new ConcurrentHashMap<>(16));
 
     public SimpleBeanFactory() {
         this.instantiationStrategy = new SimpleInstantiationStrategy();
@@ -49,18 +49,18 @@ public class SimpleBeanFactory implements BeanFactory {
                 singletonObjects.put(name, bean);
             }
         }
-        if (currentInCreation.contains(name)) {
+        if (currentInCreation.get().contains(name)) {
             if (beanDefinition.isPrototype()) {
-                currentInCreation.remove(name);
+                currentInCreation.get().remove(name);
                 throw new UnsupportedOperationException("prototype bean do not support circular reference");
             }
             return bean;
         }
-        currentInCreation.add(name);
+        currentInCreation.get().add(name);
         for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
             beanPostProcessor.postProcessAfterInitialization(bean, name);
         }
-        currentInCreation.remove(name);
+        currentInCreation.get().remove(name);
         return bean;
     }
 
