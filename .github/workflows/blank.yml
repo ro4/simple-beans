@@ -48,6 +48,5 @@ jobs:
         uses: andstor/file-reader-action@v1
         with:
           path: "target/jmh.log"
-
-        - name: JMH Result
-          run: echo "${ steps.read_file.outputs.contents }"
+      - name: JMH Result
+        run: echo "${ steps.read_file.outputs.contents }"
