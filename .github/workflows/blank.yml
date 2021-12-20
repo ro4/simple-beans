@@ -35,7 +35,7 @@ jobs:
         with:
           java-version: 8
       - name: Run JMH and unit test
-        run: mvn test -Pjmh-benchmark
+        run: mvn test #-Pjmh-benchmark
       - name: Test Report
         uses: dorny/test-reporter@v1
         if: success() || failure()    # run this step even if previous step failed
@@ -43,12 +43,18 @@ jobs:
           name: Tests report            # Name of the check run which will be created
           path:  '**/target/surefire-reports/TEST-*.xml'    # Path to test results
           reporter: java-junit        # Format of test results
-      - uses: LouisBrunner/checks-action@v1.2.0
-        if: always()
+#      - uses: LouisBrunner/checks-action@v1.2.0
+#        if: always()
+#        with:
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          name: JMH report
+#          conclusion: ${{ job.status }}
+#          output: |
+#            {"summary":"JMH result"}
+#          output_text_description_file: target/jmh.log
+      - name: Run check style
+        uses: nikitasavinov/checkstyle-action@master
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: JMH report
-          conclusion: ${{ job.status }}
-          output: |
-            {"summary":"JMH result"}
-          output_text_description_file: target/jmh.log
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: 'github-pr-check'
+          tool_name: 'Code Smell'
