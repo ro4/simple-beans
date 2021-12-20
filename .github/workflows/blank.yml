@@ -52,17 +52,17 @@ jobs:
 #        uses: juliangruber/read-file-action@v1
 #        with:
 #          path: target/surefire-reports/me.ro4.beans.BeanFactoryTest.txt
-      - uses: edwardgeorge/file-outputs-action@main
-        id: jmh-file
-        with:
-          files: |
-            result=target/surefire-reports/me.ro4.beans.BeanFactoryTest.txt
-      - uses: LouisBrunner/checks-action@v1.1.1
+#      - uses: edwardgeorge/file-outputs-action@main
+#        id: jmh-file
+#        with:
+#          files: |
+#            result=target/surefire-reports/me.ro4.beans.BeanFactoryTest.txt
+      - uses: LouisBrunner/checks-action@v1.2.0
         if: always()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: JMH Report
           conclusion: ${{ job.status }}
           output: |
-            {"summary":"JMH result", "output_text_description_file":"target/surefire-reports/me.ro4.beans.BeanFactoryTest.txt"}
-          output_text_description_file: "target/surefire-reports/me.ro4.beans.BeanFactoryTest.txt"
+            {"summary":"JMH result"}
+          output_text_description_file: target/surefire-reports/me.ro4.beans.BeanFactoryTest.txt
