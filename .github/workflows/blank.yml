@@ -34,9 +34,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 8
-      - name: Build with Maven
-        run: mvn -B test --file pom.xml
-      - name: Run JMH
+      - name: Run JMH and unit test
         run: mvn test -Pjmh-benchmark
       - name: Test Report
         uses: dorny/test-reporter@v1
@@ -45,5 +43,11 @@ jobs:
           name: Tests report            # Name of the check run which will be created
           path:  '**/target/surefire-reports/TEST-*.xml'    # Path to test results
           reporter: java-junit        # Format of test results
-      - name: JMH result
-        run: echo "**/target/jmh.log"
+      - name: Read file contents
+        id: read_file
+        uses: andstor/file-reader-action@v1
+        with:
+          path: "target/jmh.log"
+
+        - name: JMH Result
+          run: echo "${ steps.read_file.outputs.contents }"
