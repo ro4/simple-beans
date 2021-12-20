@@ -47,13 +47,16 @@ jobs:
 #        with:
 #          name: JMH report
 #          path: target/jmh.log
-      - uses: actions/create-outputs@v0.0.0-fake
-        id: test
+      - name: JMH Report
+        id: report
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: target/surefire-reports/me.ro4.beans.BeanFactoryTest.txt
       - uses: LouisBrunner/checks-action@v1.1.1
         if: always()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: Test XYZ
+          name: JMH Report
           conclusion: ${{ job.status }}
           output: |
-            {"summary":${{ steps.test.outputs.summary }}}
+            {"summary":${{ steps.report.outputs.summary }}}
