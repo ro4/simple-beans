@@ -65,4 +65,4 @@ jobs:
           conclusion: ${{ job.status }}
           output: |
             {"summary":"JMH result"}
-          output_text_description_file: target/surefire-reports/me.ro4.beans.BeanFactoryTest.txt
+          output_text_description_file: "target/surefire-reports/me.ro4.beans.BeanFactoryTest.txt"
