@@ -56,7 +56,7 @@ jobs:
         id: jmh-file
         with:
           files: |
-            result=target/surefire-reports/me.ro4.beans.BeanFactoryTest.txt
+            !result=target/surefire-reports/me.ro4.beans.BeanFactoryTest.txt
       - uses: LouisBrunner/checks-action@v1.1.1
         if: always()
         with:
