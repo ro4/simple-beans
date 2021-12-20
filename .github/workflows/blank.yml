@@ -43,10 +43,5 @@ jobs:
           name: Tests report            # Name of the check run which will be created
           path:  '**/target/surefire-reports/TEST-*.xml'    # Path to test results
           reporter: java-junit        # Format of test results
-      - name: Read file contents
-        id: read_file
-        uses: andstor/file-reader-action@v1
-        with:
-          path: "target/jmh.log"
       - name: JMH Result
-        run: echo "${ steps.read_file.outputs.contents }"
+        run: echo "target/jmh.log"
