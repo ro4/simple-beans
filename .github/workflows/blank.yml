@@ -43,5 +43,7 @@ jobs:
           name: Tests report            # Name of the check run which will be created
           path:  '**/target/surefire-reports/TEST-*.xml'    # Path to test results
           reporter: java-junit        # Format of test results
-      - name: JMH Result
-        run: echo "target/jmh.log"
+      - uses: actions/upload-artifact@v2
+        with:
+          name: JMH report
+          path: target/jmh.log
