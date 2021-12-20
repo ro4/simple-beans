@@ -53,6 +53,7 @@ jobs:
 #        with:
 #          path: target/surefire-reports/me.ro4.beans.BeanFactoryTest.txt
       - uses: edwardgeorge/file-outputs-action@main
+        id: jmh-file
         with:
           files: |
             result=target/surefire-reports/me.ro4.beans.BeanFactoryTest.txt
@@ -63,4 +64,4 @@ jobs:
           name: JMH Report
           conclusion: ${{ job.status }}
           output: |
-            {"summary":"${{ steps.migrations.outputs.result }}"}
+            {"summary":"${{ steps.jmh-file.outputs.result }}"}
