@@ -58,4 +58,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: JMH Report
           conclusion: ${{ job.status }}
-          output: ${{ steps.report.outputs }}
+          output: |
+            {"summary":"HELLO"}
