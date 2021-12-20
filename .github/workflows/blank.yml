@@ -37,7 +37,7 @@ jobs:
       - name: Build with Maven
         run: mvn -B test --file pom.xml
       - name: Run JMH
-          run: mvn test -Pjmh-benchmark
+        run: mvn test -Pjmh-benchmark
       - name: Test Report
         uses: dorny/test-reporter@v1
         if: success() || failure()    # run this step even if previous step failed
