@@ -35,7 +35,7 @@ jobs:
         with:
           java-version: 8
       - name: Run JMH and unit test
-        run: mvn test -Pjmh-benchmark
+        run: mvn test #-Pjmh-benchmark
       - name: Test Report
         uses: dorny/test-reporter@v1
         if: success() || failure()    # run this step even if previous step failed
@@ -43,7 +43,17 @@ jobs:
           name: Tests report            # Name of the check run which will be created
           path:  '**/target/surefire-reports/TEST-*.xml'    # Path to test results
           reporter: java-junit        # Format of test results
-      - uses: actions/upload-artifact@v2
+#      - uses: actions/upload-artifact@v2
+#        with:
+#          name: JMH report
+#          path: target/jmh.log
+      - uses: actions/create-outputs@v0.0.0-fake
+        id: test
+      - uses: LouisBrunner/checks-action@v1.1.1
+        if: always()
         with:
-          name: JMH report
-          path: target/jmh.log
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Test XYZ
+          conclusion: ${{ job.status }}
+          output: |
+            {"summary":${{ steps.test.outputs.summary }}}
