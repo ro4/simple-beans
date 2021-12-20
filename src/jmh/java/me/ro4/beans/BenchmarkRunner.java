@@ -9,6 +9,7 @@ public class BenchmarkRunner {
     public static void main(String[] args) throws RunnerException {
         Options options = new OptionsBuilder()
                 .include(BeanFactoryBenchmark.class.getSimpleName())
+                .output("target/jmh.log")
                 .build();
         new Runner(options).run();
     }
