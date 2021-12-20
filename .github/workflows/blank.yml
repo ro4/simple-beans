@@ -47,11 +47,15 @@ jobs:
 #        with:
 #          name: JMH report
 #          path: target/jmh.log
-      - name: JMH Report
-        id: report
-        uses: juliangruber/read-file-action@v1
+#      - name: JMH Report
+#        id: report
+#        uses: juliangruber/read-file-action@v1
+#        with:
+#          path: target/surefire-reports/me.ro4.beans.BeanFactoryTest.txt
+      - uses: edwardgeorge/file-outputs-action@main
         with:
-          path: target/surefire-reports/me.ro4.beans.BeanFactoryTest.txt
+          files: |
+            result=target/surefire-reports/me.ro4.beans.BeanFactoryTest.txt
       - uses: LouisBrunner/checks-action@v1.1.1
         if: always()
         with:
@@ -59,4 +63,4 @@ jobs:
           name: JMH Report
           conclusion: ${{ job.status }}
           output: |
-            {"summary":"HELLO"}
+            {"summary":"${{ steps.migrations.outputs.result }}"}
