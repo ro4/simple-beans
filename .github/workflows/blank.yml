@@ -59,4 +59,4 @@ jobs:
           name: JMH Report
           conclusion: ${{ job.status }}
           output: |
-            {"summary":"${{ steps.report.outputs.content }}"}
+            ${{ steps.report.outputs }}
