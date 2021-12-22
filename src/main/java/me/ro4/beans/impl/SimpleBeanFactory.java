@@ -6,7 +6,6 @@ import me.ro4.beans.BeanPostProcessor;
 import me.ro4.beans.InstantiationStrategy;
 import me.ro4.beans.annotation.Autowired;
 import me.ro4.beans.util.Assert;
-import sun.reflect.Reflection;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
