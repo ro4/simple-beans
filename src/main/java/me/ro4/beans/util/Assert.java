@@ -13,4 +13,11 @@ public class Assert {
             throw new IllegalArgumentException(message);
         }
     }
+
+    public static void isNotEmpty(Object[] objects, String message) {
+        isNotNull(objects, message);
+        if (objects.length < 1) {
+            throw new IllegalArgumentException(message);
+        }
+    }
 }

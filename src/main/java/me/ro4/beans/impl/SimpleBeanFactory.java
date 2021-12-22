@@ -6,9 +6,11 @@ import me.ro4.beans.BeanPostProcessor;
 import me.ro4.beans.InstantiationStrategy;
 import me.ro4.beans.annotation.Autowired;
 import me.ro4.beans.util.Assert;
+import sun.reflect.Reflection;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -118,6 +120,13 @@ public class SimpleBeanFactory implements BeanFactory {
 
     protected Object createBean(BeanDefinition beanDefinition) {
         try {
+            if (beanDefinition.isAbstract()) {
+                Class<?> factoryBeanClass = Class.forName(beanDefinition.getFactoryBeanName());
+                Object factoryBean = getBean(factoryBeanClass);
+                Method factoryMethod = factoryBeanClass.getDeclaredMethod(beanDefinition.getFactoryMethodName());
+                factoryMethod.setAccessible(true);
+                return factoryMethod.invoke(factoryBean);
+            }
             // constructor injection
             Class<?> clazz = Class.forName(beanDefinition.getClassName());
             Constructor<?>[] constructors = clazz.getDeclaredConstructors();
@@ -137,6 +146,8 @@ public class SimpleBeanFactory implements BeanFactory {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
                 IllegalArgumentException | InvocationTargetException ignore) {
 
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
         }
         return this.instantiationStrategy.instantiate(beanDefinition);
     }

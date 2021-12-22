@@ -20,6 +20,12 @@ public class SimpleBeanDefinition implements BeanDefinition {
 
     private boolean primary = false;
 
+    private String factoryBeanName;
+
+    private String factoryMethodName;
+
+    private boolean abstractFlag = false;
+
     @Override
     public String getClassName() {
         return this.className;
@@ -66,6 +72,16 @@ public class SimpleBeanDefinition implements BeanDefinition {
     }
 
     @Override
+    public void setAbstract(boolean abstractFlag) {
+        this.abstractFlag = abstractFlag;
+    }
+
+    @Override
+    public boolean isAbstract() {
+        return abstractFlag;
+    }
+
+    @Override
     public void setPrimary(boolean primary) {
         this.primary = primary;
     }
@@ -95,5 +111,25 @@ public class SimpleBeanDefinition implements BeanDefinition {
     @Override
     public List<PropertyValue> getPropertyValues() {
         return new ArrayList<>(this.propertyValues.values());
+    }
+
+    @Override
+    public void setFactoryBeanName(String factoryBeanName) {
+        this.factoryBeanName = factoryBeanName;
+    }
+
+    @Override
+    public String getFactoryBeanName() {
+        return factoryBeanName;
+    }
+
+    @Override
+    public void setFactoryMethodName(String factoryMethodName) {
+        this.factoryMethodName = factoryMethodName;
+    }
+
+    @Override
+    public String getFactoryMethodName() {
+        return factoryMethodName;
     }
 }

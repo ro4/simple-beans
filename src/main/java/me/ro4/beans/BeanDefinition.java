@@ -22,6 +22,10 @@ public interface BeanDefinition {
 
     boolean isPrototype();
 
+    public void setAbstract(boolean abstractFlag);
+
+    public boolean isAbstract();
+
     void setPrimary(boolean primary);
 
     boolean isPrimary();
@@ -33,6 +37,14 @@ public interface BeanDefinition {
     void clearPropertyValue();
 
     List<PropertyValue> getPropertyValues();
+
+    void setFactoryBeanName(String factoryBeanName);
+
+    String getFactoryBeanName();
+
+    void setFactoryMethodName(String factoryMethodName);
+
+    String getFactoryMethodName();
 
     enum ScopeEnum {
         SINGLETON,
