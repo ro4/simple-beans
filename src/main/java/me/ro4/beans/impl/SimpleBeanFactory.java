@@ -122,6 +122,9 @@ public class SimpleBeanFactory implements BeanFactory {
             if (beanDefinition.isAbstract()) {
                 Class<?> factoryBeanClass = Class.forName(beanDefinition.getFactoryBeanName());
                 Object factoryBean = getBean(factoryBeanClass);
+                if (Objects.isNull(factoryBean)) {
+                    return null;
+                }
                 Method factoryMethod = factoryBeanClass.getDeclaredMethod(beanDefinition.getFactoryMethodName());
                 factoryMethod.setAccessible(true);
                 return factoryMethod.invoke(factoryBean);
