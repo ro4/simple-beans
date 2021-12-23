@@ -1,6 +1,12 @@
 package me.ro4.beans;
 
+import jdk.internal.org.objectweb.asm.ClassReader;
+import jdk.internal.org.objectweb.asm.ClassVisitor;
+import jdk.internal.org.objectweb.asm.ClassWriter;
+import jdk.internal.org.objectweb.asm.Opcodes;
+
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -9,14 +15,20 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-public class ClazzReader {
-    public static void main(String[] args) {
-        String packageName = "me.ro4";
+public class ClazzUtil {
+    public static void main(String[] args) throws ClassNotFoundException, IOException {
+        String packageName = "";
         // List<String> classNames = getClassName(packageName);
+//        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+//        classLoader.loadClass("classpath");
         List<String> classNames = getClassName(packageName, true);
         if (classNames != null) {
             for (String className : classNames) {
-                System.out.println(className);
+                ClassReader classReader = new ClassReader(className);
+                ClassVisitor classVisitor = new ClassWriter(classReader, Opcodes.ASM5);
+
+                classReader.getInterfaces();
+                classReader.getItemCount();
             }
         }
     }
