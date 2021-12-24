@@ -20,13 +20,14 @@ public class SimpleResourcePatternResolver implements ResourcePatternResolver {
         }
         File file = new File(url.getPath());
         File[] childFiles = file.listFiles();
-        getClassNameByFile(childFiles, myClassName);;
+        getClassNameByFile(childFiles, myClassName);
+        ;
         return myClassName;
     }
 
     protected void getClassNameByFile(File[] childFiles, List<String> result) {
         for (File childFile : childFiles) {
-            if (childFile.isDirectory()) {
+            if (childFile.isDirectory() && null != childFile.listFiles()) {
                 getClassNameByFile(childFile.listFiles(), result);
             } else {
                 String childFilePath = childFile.getPath();
@@ -40,7 +41,7 @@ public class SimpleResourcePatternResolver implements ResourcePatternResolver {
     }
 
     public static void main(String[] args) throws IOException {
-        List<String> classNames =  new SimpleResourcePatternResolver().getResources("me.ro4");
+        List<String> classNames = new SimpleResourcePatternResolver().getResources("me.ro4");
         System.out.println(classNames);
     }
 
