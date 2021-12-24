@@ -1,5 +1,6 @@
 package me.ro4.beans.io;
 
+import me.ro4.beans.annotation.Component;
 import me.ro4.beans.util.ClassUtils;
 
 import java.io.File;
@@ -8,7 +9,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
+@SuppressWarnings("unused")
 public class SimpleResourcePatternResolver implements ResourcePatternResolver {
+
+    static {
+        System.out.println("SimpleResourcePatternResolver" + " loading....");
+    }
     @Override
     public List<String> getResources(String locationPattern) throws IOException {
         List<String> myClassName = new ArrayList<>();
