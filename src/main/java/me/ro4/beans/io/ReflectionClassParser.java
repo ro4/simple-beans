@@ -2,19 +2,12 @@ package me.ro4.beans.io;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ReflectionClassParser implements ClassParser {
 
-    private String className;
-
-    private Class<?> clazz;
-
-    private Map<String, Method> methodCache = new HashMap<>();
+    private final Class<?> clazz;
 
     public ReflectionClassParser(String className) throws ClassNotFoundException {
-        this.className = className;
         this.clazz = Class.forName(className);
     }
 
@@ -25,13 +18,7 @@ public class ReflectionClassParser implements ClassParser {
 
     @Override
     public boolean methodHasAnnotation(String methodName, Class<? extends Annotation> annotationClass) throws NoSuchMethodException {
-        Method method;
-        if (methodCache.containsKey(methodName)) {
-            method = methodCache.get(methodName);
-        } else {
-            method = clazz.getDeclaredMethod(methodName);
-            methodCache.put(methodName, method);
-        }
+        Method method = clazz.getDeclaredMethod(methodName);
         return method.isAnnotationPresent(annotationClass);
     }
 }
