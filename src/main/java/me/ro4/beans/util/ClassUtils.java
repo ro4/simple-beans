@@ -39,4 +39,13 @@ public abstract class ClassUtils {
         }
         return cl;
     }
+
+    public static String getMainClassName()
+    {
+        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+        if (trace.length > 0) {
+            return trace[trace.length - 1].getClassName();
+        }
+        return null;
+    }
 }

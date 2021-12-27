@@ -7,7 +7,6 @@ import me.ro4.beans.annotation.Bean;
 import me.ro4.beans.util.Assert;
 
 import java.lang.reflect.Method;
-import java.util.Objects;
 
 public class SimpleAnnotationConfigRegistry implements AnnotationConfigRegistry, BeanFactoryAware {
     private BeanFactory beanFactory;
