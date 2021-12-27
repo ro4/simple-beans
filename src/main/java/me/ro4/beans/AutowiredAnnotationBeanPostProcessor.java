@@ -21,7 +21,7 @@ public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor {
         Field[] fields = clazz.getDeclaredFields();
         // field autowired injection
         for (Field field : fields) {
-            if (field.getDeclaredAnnotationsByType(Autowired.class).length == 0) {
+            if (!field.isAnnotationPresent(Autowired.class)) {
                 continue;
             }
             field.setAccessible(true);
@@ -34,7 +34,7 @@ public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor {
         // method autowired injection
         Method[] methods = clazz.getMethods();
         for (Method method : methods) {
-            if (method.getDeclaredAnnotationsByType(Autowired.class).length == 0) {
+            if (!method.isAnnotationPresent(Autowired.class)) {
                 continue;
             }
             method.setAccessible(true);

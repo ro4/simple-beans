@@ -133,9 +133,8 @@ public class SimpleBeanFactory implements BeanFactory {
             Class<?> clazz = Class.forName(beanDefinition.getClassName());
             Constructor<?>[] constructors = clazz.getDeclaredConstructors();
             for (Constructor<?> constructor : constructors) {
-                Autowired[] annotations = constructor.getAnnotationsByType(Autowired.class);
                 Parameter[] parameters = constructor.getParameters();
-                if (annotations.length < 1 || parameters.length < 1) {
+                if (!constructor.isAnnotationPresent(Autowired.class) || parameters.length < 1) {
                     continue;
                 }
                 Object[] params = new Object[parameters.length];

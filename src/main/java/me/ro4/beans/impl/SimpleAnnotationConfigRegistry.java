@@ -26,7 +26,7 @@ public class SimpleAnnotationConfigRegistry implements AnnotationConfigRegistry,
             beanFactory.registerBeanDefinition("component" + componentClass.getSimpleName(), componentBD);
             Method[] methods = componentClass.getDeclaredMethods();
             for (Method method : methods) {
-                if (Objects.isNull(method.getAnnotation(Bean.class))) {
+                if (!method.isAnnotationPresent(Bean.class)) {
                     continue;
                 }
                 SimpleBeanDefinition sbd = new SimpleBeanDefinition();
