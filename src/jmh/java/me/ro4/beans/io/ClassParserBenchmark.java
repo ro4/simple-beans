@@ -14,22 +14,6 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @SuppressWarnings("unused")
 public class ClassParserBenchmark {
-
-//    public static class Shared {
-//        public ClassParser reflectionParser;
-//        public ClassParser asmParser;
-//    }
-//
-//    @State(Scope.Benchmark)
-//    public static class PrototypeCreationState extends Shared {
-//        @Setup
-//        public void setup() throws ClassNotFoundException, IOException {
-//            String obj = "me.ro4.beans.beanexample.AnnoBean";
-//            reflectionParser = new ReflectionClassParser(obj);
-//            asmParser = new AsmClassParser(obj);
-//        }
-//    }
-
     /**
      * Benchmark                         Mode  Cnt     Score     Error   Units
      * ClassParserBenchmark.asm         thrpt    6    32.691 ±   1.060  ops/ms

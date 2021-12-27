@@ -7,17 +7,19 @@ import org.objectweb.asm.tree.ClassNode;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 
+/**
+ * @see ClassParserBenchmark
+ * 速度比反射慢了 100 倍，可能没用对，先用反射的方式来
+ */
 public class AsmClassParser implements ClassParser {
 
-    private String className;
-    private ClassReader classReader;
-    private ClassNode classNode;
+    private final ClassReader classReader;
+    private final ClassNode classNode;
 
     public AsmClassParser(String className) throws IOException {
         classReader = new ClassReader(className);
         classNode = new ClassNode();
         classReader.accept(classNode, ClassReader.SKIP_DEBUG);
-        this.className = className;
     }
 
     @Override
