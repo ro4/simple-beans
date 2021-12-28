@@ -1,10 +1,9 @@
 package me.ro4.beans.impl;
 
-import me.ro4.beans.BeanDefinition;
-import me.ro4.beans.BeanFactory;
-import me.ro4.beans.BeanPostProcessor;
-import me.ro4.beans.InstantiationStrategy;
+import me.ro4.beans.*;
 import me.ro4.beans.annotation.Autowired;
+import me.ro4.beans.io.ResourcePatternResolver;
+import me.ro4.beans.io.SimpleResourcePatternResolver;
 import me.ro4.beans.util.Assert;
 
 import java.lang.reflect.Constructor;
@@ -15,23 +14,28 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SimpleBeanFactory implements BeanFactory {
+    private final ResourcePatternResolver resourcePatternResolver;
+
+    private final InstantiationStrategy instantiationStrategy;
+
     private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
 
     private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(64);
 
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
 
-    private final InstantiationStrategy instantiationStrategy;
+    private final List<BeanFactoryPostProcessor> beanFactoryPostProcessors = new ArrayList<>();
 
     private final ThreadLocal<Set<String>> currentInCreation = ThreadLocal.withInitial(HashSet::new);
-//            Collections.newSetFromMap(new ConcurrentHashMap<>(16));
 
     public SimpleBeanFactory() {
         this.instantiationStrategy = new SimpleInstantiationStrategy();
+        this.resourcePatternResolver = new SimpleResourcePatternResolver();
     }
 
-    public SimpleBeanFactory(InstantiationStrategy instantiationStrategy) {
+    public SimpleBeanFactory(InstantiationStrategy instantiationStrategy, ResourcePatternResolver resourcePatternResolver) {
         this.instantiationStrategy = instantiationStrategy;
+        this.resourcePatternResolver = resourcePatternResolver;
     }
 
     @Override
@@ -115,6 +119,11 @@ public class SimpleBeanFactory implements BeanFactory {
     public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
         beanPostProcessor.setBeanFactory(this);
         beanPostProcessors.add(beanPostProcessor);
+    }
+
+    @Override
+    public void addBeanFactoryPostProcessor(BeanFactoryPostProcessor beanFactoryPostProcessor) {
+        beanFactoryPostProcessors.add(beanFactoryPostProcessor);
     }
 
     protected Object createBean(BeanDefinition beanDefinition) {

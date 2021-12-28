@@ -10,4 +10,6 @@ public interface BeanFactory {
     void registerBeanDefinition(String beanName, BeanDefinition beanDefinition);
 
     void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);
+
+    void addBeanFactoryPostProcessor(BeanFactoryPostProcessor beanFactoryPostProcessor);
 }

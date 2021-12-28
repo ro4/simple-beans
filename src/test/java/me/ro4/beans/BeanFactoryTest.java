@@ -49,7 +49,7 @@ public class BeanFactoryTest {
         sam = (SimpleBean) beanFactory.getBean("sam");
         Assert.assertEquals("Zhang", sam.getName());
 
-        BeanFactory beanFactory1 = new SimpleBeanFactory(bd -> null);
+        BeanFactory beanFactory1 = new SimpleBeanFactory(bd -> null, r -> null);
         beanFactory1.registerBeanDefinition("sam", samDefinition);
         Assert.assertNull(beanFactory1.getBean("sam"));
     }
