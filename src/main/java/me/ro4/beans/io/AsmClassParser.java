@@ -13,13 +13,16 @@ import java.lang.annotation.Annotation;
  */
 public class AsmClassParser implements ClassParser {
 
+    private static final int PARSING_OPTIONS = ClassReader.SKIP_DEBUG
+            | ClassReader.SKIP_CODE | ClassReader.SKIP_FRAMES;
+
     private final ClassReader classReader;
     private final ClassNode classNode;
 
     public AsmClassParser(String className) throws IOException {
         classReader = new ClassReader(className);
         classNode = new ClassNode();
-        classReader.accept(classNode, ClassReader.SKIP_DEBUG);
+        classReader.accept(classNode, PARSING_OPTIONS);
     }
 
     @Override
