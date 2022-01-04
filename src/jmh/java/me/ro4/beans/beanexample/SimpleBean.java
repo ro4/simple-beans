@@ -3,7 +3,7 @@ package me.ro4.beans.beanexample;
 public class SimpleBean {
     private String name;
 
-    SimpleBean() {
+    public SimpleBean() {
 
     }
     public void setName(String name) {
