@@ -2,10 +2,7 @@ package me.ro4.beans;
 
 import me.ro4.beans.annotation.Autowired;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
+import java.lang.reflect.*;
 
 public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor {
     private BeanFactory beanFactory;
@@ -13,6 +10,35 @@ public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor {
     @Override
     public void setBeanFactory(BeanFactory beanFactory) {
         this.beanFactory = beanFactory;
+    }
+
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) {
+        // constructor injection
+        BeanDefinition bd = beanFactory.getBeanDefinition(beanName);
+        if (null == bd) {
+            return bean;
+        }
+        try {
+            Class<?> clazz = Class.forName(bd.getClassName());
+            Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+            for (Constructor<?> constructor : constructors) {
+                Parameter[] parameters = constructor.getParameters();
+                if (!constructor.isAnnotationPresent(Autowired.class) || parameters.length < 1) {
+                    continue;
+                }
+                Object[] params = new Object[parameters.length];
+                for (int i = 0; i < parameters.length; i++) {
+                    params[i] = beanFactory.getBean(parameters[i].getType());
+                }
+                constructor.setAccessible(true);
+                return constructor.newInstance(params);
+            }
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException |
+                 InvocationTargetException ignore) {
+
+        }
+        return bean;
     }
 
     @Override

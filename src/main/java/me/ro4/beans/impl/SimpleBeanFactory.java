@@ -1,15 +1,12 @@
 package me.ro4.beans.impl;
 
 import me.ro4.beans.*;
-import me.ro4.beans.annotation.Autowired;
 import me.ro4.beans.io.ResourcePatternResolver;
 import me.ro4.beans.io.SimpleResourcePatternResolver;
 import me.ro4.beans.util.Assert;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -49,7 +46,12 @@ public class SimpleBeanFactory implements BeanFactory {
             bean = singletonObjects.getOrDefault(name, null);
         }
         if (null == bean) {
-            bean = createBean(beanDefinition);
+            for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
+                bean = beanPostProcessor.postProcessBeforeInitialization(bean, name);
+            }
+            if (null == bean) {
+                bean = createBean(beanDefinition);
+            }
             if (beanDefinition.isSingleton() && bean != null) {
                 singletonObjects.put(name, bean);
             }
@@ -116,6 +118,11 @@ public class SimpleBeanFactory implements BeanFactory {
     }
 
     @Override
+    public BeanDefinition getBeanDefinition(String beanName) {
+        return beanDefinitionMap.get(beanName);
+    }
+
+    @Override
     public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
         beanPostProcessor.setBeanFactory(this);
         beanPostProcessors.add(beanPostProcessor);
@@ -138,23 +145,8 @@ public class SimpleBeanFactory implements BeanFactory {
                 factoryMethod.setAccessible(true);
                 return factoryMethod.invoke(factoryBean);
             }
-            // constructor injection
-            Class<?> clazz = Class.forName(beanDefinition.getClassName());
-            Constructor<?>[] constructors = clazz.getDeclaredConstructors();
-            for (Constructor<?> constructor : constructors) {
-                Parameter[] parameters = constructor.getParameters();
-                if (!constructor.isAnnotationPresent(Autowired.class) || parameters.length < 1) {
-                    continue;
-                }
-                Object[] params = new Object[parameters.length];
-                for (int i = 0; i < parameters.length; i++) {
-                    params[i] = this.getBean(parameters[i].getType());
-                }
-                constructor.setAccessible(true);
-                return constructor.newInstance(params);
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
-                IllegalArgumentException | InvocationTargetException ignore) {
+        } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
+                 InvocationTargetException ignore) {
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

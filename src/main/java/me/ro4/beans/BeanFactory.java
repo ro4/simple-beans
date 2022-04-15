@@ -8,6 +8,7 @@ public interface BeanFactory {
     <T> T getBean(String name, Class<T> requiredType);
 
     void registerBeanDefinition(String beanName, BeanDefinition beanDefinition);
+    BeanDefinition getBeanDefinition(String beanName);
 
     void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);
 
