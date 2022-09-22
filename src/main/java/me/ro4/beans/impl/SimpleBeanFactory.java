@@ -73,14 +73,7 @@ public class SimpleBeanFactory implements BeanFactory {
 
     @Override
     public <T> T getBean(Class<T> requiredType) {
-        List<String> matches = new ArrayList<>(2);
-        for (Map.Entry<String, BeanDefinition> entry : beanDefinitionMap.entrySet()) {
-            String name = entry.getKey();
-            BeanDefinition beanDefinition = entry.getValue();
-            if (beanDefinition.getClassName().equals(requiredType.getName())) {
-                matches.add(name);
-            }
-        }
+        List<String> matches = findCandidates(requiredType);
         int size = matches.size();
         if (size == 0) {
             return null;
@@ -91,6 +84,19 @@ public class SimpleBeanFactory implements BeanFactory {
         }
         throw new IllegalArgumentException("ambiguous required type for " + requiredType.getName()
                 + ", found " + size + " bean names: " + String.join(", ", matches));
+    }
+
+    @Override
+    public <T> Map<String, T> getBeans(Class<T> requiredType) {
+        List<String> matches = findCandidates(requiredType);
+        if (matches.isEmpty()) {
+            return null;
+        }
+        Map<String, T> map = new HashMap<>(matches.size());
+        for (String match: matches) {
+            map.put(match, getBean(match, requiredType));
+        }
+        return map;
     }
 
     @Override
@@ -131,6 +137,21 @@ public class SimpleBeanFactory implements BeanFactory {
     @Override
     public void addBeanFactoryPostProcessor(BeanFactoryPostProcessor beanFactoryPostProcessor) {
         beanFactoryPostProcessors.add(beanFactoryPostProcessor);
+    }
+
+    protected List<String> findCandidates(Class<?> requiredType) {
+        List<String> matches = new ArrayList<>(2);
+        for (Map.Entry<String, BeanDefinition> entry : beanDefinitionMap.entrySet()) {
+            String name = entry.getKey();
+            BeanDefinition beanDefinition = entry.getValue();
+            try {
+                if (requiredType.isAssignableFrom(Class.forName(beanDefinition.getClassName()))) {
+                    matches.add(name);
+                }
+            } catch (ClassNotFoundException ignore) {
+            }
+        }
+        return matches;
     }
 
     protected Object createBean(BeanDefinition beanDefinition) {

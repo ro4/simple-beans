@@ -3,6 +3,9 @@ package me.ro4.beans;
 import me.ro4.beans.annotation.Autowired;
 
 import java.lang.reflect.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor {
     private BeanFactory beanFactory;
@@ -52,7 +55,21 @@ public class AutowiredAnnotationBeanPostProcessor implements BeanPostProcessor {
             }
             field.setAccessible(true);
             try {
-                field.set(bean, beanFactory.getBean(field.getType()));
+                Object injectVal;
+                if (Map.class == field.getType()) {
+                    // map autowired
+                    Type[] type = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
+                    if (type.length != 2) {
+                        return null;
+                    }
+                    injectVal = beanFactory.getBeans((Class<?>) type[1]);
+                } else if (List.class == field.getType()) {
+                    Type[] type = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
+                    injectVal = new ArrayList<>(beanFactory.getBeans((Class<?>) type[0]).values());
+                } else {
+                    injectVal = beanFactory.getBean(field.getType());
+                }
+                field.set(bean, injectVal);
             } catch (IllegalArgumentException | IllegalAccessException ignore) {
             }
         }

@@ -1,9 +1,6 @@
 package me.ro4.beans;
 
-import me.ro4.beans.beanexample.FatherBean;
-import me.ro4.beans.beanexample.PersonBean;
-import me.ro4.beans.beanexample.SimpleBean;
-import me.ro4.beans.beanexample.SonBean;
+import me.ro4.beans.beanexample.*;
 import me.ro4.beans.impl.SimpleBeanDefinition;
 import me.ro4.beans.impl.SimpleBeanFactory;
 import org.junit.Assert;
@@ -65,9 +62,32 @@ public class BeanFactoryAutowiredTest {
         sonDefinition.setScope(BeanDefinition.ScopeEnum.PROTOTYPE);
         beanFactory.registerBeanDefinition("son", sonDefinition);
         try {
-            FatherBean father = beanFactory.getBean("father", FatherBean.class);
+            beanFactory.getBean("father", FatherBean.class);
         } catch (Exception e) {
             Assert.assertEquals(e.getClass(), UnsupportedOperationException.class);
         }
+    }
+
+    @Test
+    public void mapAndListFieldTest() {
+        BeanDefinition womanBeanDefinition = new SimpleBeanDefinition();
+        womanBeanDefinition.setClassName(Woman.class.getName());
+        BeanDefinition manBeanDefinition = new SimpleBeanDefinition();
+        manBeanDefinition.setClassName(Man.class.getName());
+        BeanDefinition multipleBeanDefinition = new SimpleBeanDefinition();
+        multipleBeanDefinition.setClassName(MultipleBean.class.getName());
+        beanFactory.registerBeanDefinition("woman", womanBeanDefinition);
+        beanFactory.registerBeanDefinition("man", manBeanDefinition);
+        beanFactory.registerBeanDefinition("multipleBean", multipleBeanDefinition);
+
+        MultipleBean multipleBean = beanFactory.getBean("multipleBean", MultipleBean.class);
+        Man man = beanFactory.getBean("man", Man.class);
+        Woman woman = beanFactory.getBean("woman", Woman.class);
+        Assert.assertNotNull(multipleBean);
+        Assert.assertNotNull(multipleBean.getHumanMap());
+        Assert.assertEquals("must equal", man, multipleBean.getHumanMap().get("man"));
+        Assert.assertEquals("must equal", woman, multipleBean.getHumanMap().get("woman"));
+        Assert.assertNotNull(multipleBean.getHumanList());
+        Assert.assertEquals("there are two impl", 2, multipleBean.getHumanList().size());
     }
 }
